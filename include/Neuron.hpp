@@ -7,6 +7,8 @@ class Neuron
 {
     public:
         Neuron(double val);
+
+        void setValue(double val);
         //Fast Sigmoid Function -Easyest function- Non Linear Function
         //f(x) = x / (1 + abs(x))
         void activate();

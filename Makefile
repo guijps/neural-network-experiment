@@ -1,8 +1,8 @@
 # Variables
 BUILD_DIR := build
-
+name := neural-network-experiment
 # Default target
-all: build
+all: clean build
 
 # Create the build directory and compile the project
 build:

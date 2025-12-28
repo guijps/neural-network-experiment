@@ -7,7 +7,12 @@ Neuron::Neuron(double val)
     activate();
     derive();
 }
-
+void Neuron::setValue(double val)
+{
+    this->value = val;
+    activate();
+    derive();
+}
 void Neuron::activate()
 {
     //Fast Sigmoid Function -Easyest function- Non Linear Function
