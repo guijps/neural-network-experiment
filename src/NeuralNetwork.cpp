@@ -1,6 +1,6 @@
 #include "../include/NeuralNetwork.hpp"
 #include "../include/utils/MultiplyMatrix.hpp"
-
+int INPUT_LAYER_INDEX = 0;
 NeuralNetwork::NeuralNetwork(vector<int> topology)
 {
     this->topologySize = topology.size();
@@ -27,21 +27,32 @@ void NeuralNetwork::printWeightsToConsole()
 
 void NeuralNetwork::setCurrentInput(vector<double> inputValues)
 {
+    cout << "Setting current input values." << endl;
     this->currentInput = inputValues;
-    for(int i = 0; i< topologySize; i++){
-        this->layers[0]->setValue(i,inputValues[i]);
+    for(int i = 0; i< topology[INPUT_LAYER_INDEX]; i++){
+        this->layers[INPUT_LAYER_INDEX]->setValue(i,inputValues[i]);
     }
 }
 
 void NeuralNetwork::setCurrentTarget(vector<double> targetValues)
 {
+    cout << "Setting current target values." << endl;
     this->target = targetValues;
+       if(errors.size() >0)
+       {
+            fill(errors.begin(), errors.end(), 0.0);
+
+            cout << "Finished setting current target values." << endl;
+            return;
+       }
     //fill errors vector with zeros
     for(int i =0; i < topology.back(); i++)
     {
         this->errors.push_back(0.0);
     }
+    cout << "Finished setting current target values." << endl;
 }
+
 
 void NeuralNetwork::printToConsole()
 {
@@ -69,18 +80,19 @@ void NeuralNetwork::feedForward()
     int n = this-> layers.size();
     for(int i = 0; i< ( n-1); i++)
     {
-        cout<<"Feedforwarding from Layer "<< i <<endl;
+        // cout<<"------------------------"<<endl;
+        // cout<<"Feedforwarding from Layer "<< i <<endl;
         Matrix* a = this->getNeuronMatrix(i);
         
         if(i != 0)
         {
             a = this-> getActivatedNeuronMatrix(i); 
         }
-        cout<<"Neuron Matrix: "<< i<< endl;
-        a->printToConsole();
+        // cout<<"Neuron Matrix: "<< i<< endl;
+        // a->printToConsole();
         Matrix *b = this-> getWeightMatrix(i);
-        cout<<"Weight Matrix: "<< i<< endl;
-        b->printToConsole();
+        // cout<<"Weight Matrix: "<< i<< endl;
+        // b->printToConsole();
         Matrix *c = (new utils::MultiplyMatrix(a,b))->execute();
         
         for(int c_index= 0;c_index< c->getCols();c_index++){
@@ -107,10 +119,11 @@ void NeuralNetwork::setErrors()
     vector<Neuron *> outputNeurons = this->layers.at(outputLayerIndex)->getNeurons();
     for(int i = 0; i <target.size(); i++){
        
+        // Minimize Error = Target 
         double neuronOutput = outputNeurons.at(i)->getActivatedValue();
         double targetValue = this->target.at(i);
         double neuronError = targetValue - neuronOutput;
-        this->errors.at(i) = neuronError;
+        this->errors.at(i) = neuronError*neuronError; //Using Mean Squared Error
         this->error +=  neuronError ; //Using Mean Squared Error
     }
     //this is for historical tracking

@@ -19,6 +19,15 @@ class NeuralNetwork
         void backPropagate();
         void setCurrentTarget(vector<double> targetValues);
         void setErrors();
+
+        void Train(int epochs)
+        {
+            for(int i =0; i < epochs; i++){
+                this->feedForward();
+                this->setErrors();
+                this->backPropagate();
+            }
+        }
         void setNeuronValue(int indexLayer,int indexNeuron,double value)
         {
             this->layers.at(indexLayer)->setValue(indexNeuron,value);

@@ -10,3 +10,13 @@ add_executable(
     src/Layer.cpp
     src/utils/MultiplyMatrix.cpp
 )
+
+add_executable(
+    test
+    src/test_nn.cpp
+    src/Neuron.cpp
+    src/Matrix.cpp
+    src/NeuralNetwork.cpp
+    src/Layer.cpp
+    src/utils/MultiplyMatrix.cpp
+)
